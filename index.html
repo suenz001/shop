@@ -11,24 +11,14 @@
         body { font-family: "Microsoft JhengHei", sans-serif; background-color: #f8f9fa; margin: 0; padding: 20px; color: #333; }
         .container { max-width: 500px; margin: 0 auto; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
         h1 { text-align: center; color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
-        
         .product-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid #f0f0f0; }
-        .product-info h3 { margin: 0; font-size: 16px; }
-        .product-info p { margin: 5px 0 0; color: #e63946; font-weight: bold; }
-        
         .btn-add { background: #4a7c59; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; }
-        
         .cart-section { background: #fdfdfd; padding: 15px; border-radius: 12px; margin-top: 20px; border: 1px dashed #ccc; }
         .cart-item { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 8px; color: #555; }
         .total-price { text-align: right; font-size: 22px; font-weight: bold; color: #2c3e50; margin-top: 15px; }
-        
         .order-form { margin-top: 25px; display: flex; flex-direction: column; gap: 12px; }
         .order-form input { padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; }
-        
-        .btn-submit { background: #3182ce; color: white; border: none; padding: 16px; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .btn-submit:hover { background: #2b6cb0; }
-        .btn-submit:disabled { background: #cbd5e0; cursor: not-allowed; }
-        
+        .btn-submit { background: #3182ce; color: white; border: none; padding: 16px; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; }
         .footer { margin-top: 40px; text-align: center; color: #a0aec0; font-size: 14px; font-weight: bold; }
     </style>
 </head>
@@ -39,26 +29,18 @@
 
         <div class="product-list">
             <div class="product-item">
-                <div class="product-info">
-                    <h3>精選咖啡豆 (250g)</h3>
-                    <p>$450</p>
-                </div>
+                <div class="product-info"><h3>精選咖啡豆 (250g)</h3><p>$450</p></div>
                 <button class="btn-add" onclick="addToCart('精選咖啡豆', 450)">加入購物車</button>
             </div>
             <div class="product-item">
-                <div class="product-info">
-                    <h3>手沖咖啡濾紙</h3>
-                    <p>$120</p>
-                </div>
+                <div class="product-info"><h3>手沖咖啡濾紙</h3><p>$120</p></div>
                 <button class="btn-add" onclick="addToCart('手沖咖啡濾紙', 120)">加入購物車</button>
             </div>
         </div>
 
         <div class="cart-section">
             <h2 style="font-size: 18px; margin-top:0;">🛒 您的購物清單</h2>
-            <div id="cartItems">
-                <p style="color:#aaa; font-size: 14px;">購物車目前是空的</p>
-            </div>
+            <div id="cartItems"><p style="color:#aaa; font-size: 14px;">購物車目前是空的</p></div>
             <div class="total-price">總計: $<span id="totalPrice">0</span></div>
         </div>
 
@@ -73,13 +55,13 @@
     </div>
 
     <script>
-        // 1. 初始化 EmailJS (請務必將此處換成你的 Public Key)
+        // 1. 初始化 (記得把 YOUR_PUBLIC_KEY 換成你自己的 Public Key)
         (function() {
             emailjs.init("YOUR_PUBLIC_KEY"); 
         })();
 
-        let cart = {}; 
-        let total = 0;
+        var cart = {}; 
+        var total = 0;
 
         function addToCart(name, price) {
             if (cart[name]) {
@@ -91,32 +73,28 @@
         }
 
         function updateCartUI() {
-            const cartDiv = document.getElementById('cartItems');
-            const totalSpan = document.getElementById('totalPrice');
+            var cartDiv = document.getElementById('cartItems');
+            var totalSpan = document.getElementById('totalPrice');
             cartDiv.innerHTML = '';
             total = 0;
 
-            const items = Object.keys(cart);
+            var items = Object.keys(cart);
             if (items.length === 0) {
                 cartDiv.innerHTML = '<p style="color:#aaa; font-size: 14px;">購物車目前是空的</p>';
             } else {
-                items.forEach(name => {
-                    const subtotal = cart[name].price * cart[name].qty;
+                items.forEach(function(name) {
+                    var subtotal = cart[name].price * cart[name].qty;
                     total += subtotal;
-                    cartDiv.innerHTML += `
-                        <div class="cart-item">
-                            <span>${name} x ${cart[name].qty}</span>
-                            <span>$${subtotal}</span>
-                        </div>`;
+                    cartDiv.innerHTML += '<div class="cart-item"><span>' + name + ' x ' + cart[name].qty + '</span><span>$' + subtotal + '</span></div>';
                 });
             }
             totalSpan.innerText = total;
         }
 
         function sendOrder() {
-            const name = document.getElementById('userName').value.trim();
-            const phone = document.getElementById('userPhone').value.trim();
-            const email = document.getElementById('userEmail').value.trim();
+            var name = document.getElementById('userName').value.trim();
+            var phone = document.getElementById('userPhone').value.trim();
+            var email = document.getElementById('userEmail').value.trim();
 
             if (!name || !phone) {
                 alert("請填寫收件人姓名與電話！");
@@ -127,32 +105,29 @@
                 return;
             }
 
-            const submitBtn = document.getElementById('submitBtn');
+            var submitBtn = document.getElementById('submitBtn');
             submitBtn.disabled = true;
             submitBtn.innerText = "傳送訂單中...";
 
-            // 整理訂單字串
-            let orderList = "";
-            Object.keys(cart).forEach(name => {
-                orderList += `${name} x ${cart[name].qty} ($${cart[name].price * cart[name].qty})\n`;
+            var orderList = "";
+            Object.keys(cart).forEach(function(name) {
+                orderList += name + " x " + cart[name].qty + " ($" + (cart[name].price * cart[name].qty) + ")\n";
             });
 
-            const templateParams = {
+            var templateParams = {
                 to_name: "Wilson Chang",
                 from_name: name,
                 user_phone: phone,
                 user_email: email,
                 order_content: orderList,
                 total_amount: total,
-                message: `新訂單提醒！\n\n收件人：${name}\n電話：${phone\nEmail：${email}\n\n訂單明細：\n${orderList}\n總金額：$${total}`
+                message: "收件人：" + name + "\n電話：" + phone + "\n內容：\n" + orderList
             };
 
-            // 2. 呼叫發送功能
-            // 這裡已填入你的 Service ID
-            emailjs.send("service_ja60kka", "YOUR_TEMPLATE_ID", templateParams)
-                .then(function(response) {
+            // 使用你提供的 ID
+            emailjs.send("service_ja60kka", "template_a9ij80j", templateParams)
+                .then(function() {
                     alert("🎉 訂單成功送出！Wilson 會盡快聯絡您。");
-                    // 清空表單與購物車
                     cart = {};
                     updateCartUI();
                     document.getElementById('userName').value = "";
@@ -161,8 +136,7 @@
                     submitBtn.disabled = false;
                     submitBtn.innerText = "確認送出訂單";
                 }, function(error) {
-                    alert("郵件傳送失敗，請檢查 EmailJS 設定。");
-                    console.log("FAILED...", error);
+                    alert("傳送失敗：" + JSON.stringify(error));
                     submitBtn.disabled = false;
                     submitBtn.innerText = "確認送出訂單";
                 });
