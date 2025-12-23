@@ -14,13 +14,13 @@
         .product-list { display: flex; flex-direction: column; gap: 20px; }
         .product-item { display: flex; align-items: center; padding: 15px; border-bottom: 1px solid #f0f0f0; gap: 15px; }
         
-        /* 圖片放大設定：將寬高從 80px 改為 120px */
-        .product-img { width: 120px; height: 120px; object-fit: cover; border-radius: 10px; border: 1px solid #eee; }
+        /* 圖片放大到 120px */
+        .product-img { width: 120px; height: 120px; object-fit: cover; border-radius: 10px; border: 1px solid #eee; flex-shrink: 0; }
         
         .product-info { flex-grow: 1; }
         .product-info h3 { margin: 0; font-size: 16px; }
         .product-info p { margin: 5px 0 0; color: #e63946; font-weight: bold; }
-        .btn-add { background: #4a7c59; color: white; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        .btn-add { background: #4a7c59; color: white; border: none; padding: 10px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; }
         .cart-section { background: #fdfdfd; padding: 15px; border-radius: 12px; margin-top: 20px; border: 1px dashed #ccc; }
         .cart-item { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 8px; color: #555; }
         .total-price { text-align: right; font-size: 22px; font-weight: bold; color: #2c3e50; margin-top: 15px; }
@@ -37,59 +37,4 @@
 
         <div class="product-list">
             <div class="product-item">
-                <img src="item1.jpg" class="product-img" alt="刺繡花卉抱枕">
-                <div class="product-info">
-                    <h3>刺繡花卉抱枕</h3>
-                    <p>$500</p>
-                </div>
-                <button class="btn-add" onclick="addToCart('刺繡花卉抱枕', 500)">加入</button>
-            </div>
-
-            <div class="product-item">
-                <img src="item3.jpg" class="product-img" alt="可愛無尾熊娃娃">
-                <div class="product-info">
-                    <h3>可愛無尾熊娃娃</h3>
-                    <p>$600</p>
-                </div>
-                <button class="btn-add" onclick="addToCart('可愛無尾熊娃娃', 600)">加入</button>
-            </div>
-
-            <div class="product-item">
-                <img src="item2.jpg" class="product-img" alt="KOF 雅典娜海報">
-                <div class="product-info">
-                    <h3>KOF 雅典娜海報</h3>
-                    <p>$30</p>
-                </div>
-                <button class="btn-add" onclick="addToCart('KOF 雅典娜海報', 30)">加入</button>
-            </div>
-        </div>
-
-        <div class="cart-section">
-            <h2 style="font-size: 18px; margin-top:0;">🛒 您的購物清單</h2>
-            <div id="cartItems"><p style="color:#aaa; font-size: 14px;">購物車目前是空的</p></div>
-            <div class="total-price">總計: $<span id="totalPrice">0</span></div>
-        </div>
-
-        <div class="order-form">
-            <input type="text" id="userName" placeholder="收件人姓名 (必填)">
-            <input type="tel" id="userPhone" placeholder="聯絡電話 (必填)">
-            <input type="email" id="userEmail" placeholder="您的電子郵件">
-            <button class="btn-submit" id="submitBtn" onclick="sendOrder()">確認送出訂單</button>
-        </div>
-
-        <div class="footer">作者 Wilson Chang</div>
-    </div>
-
-    <script>
-        (function() {
-            emailjs.init("1xyaEXeOMn5ydv3Ay"); 
-        })();
-
-        var cart = {}; 
-        var total = 0;
-
-        function addToCart(name, price) {
-            if (cart[name]) {
-                cart[name].qty += 1;
-            } else {
-                cart[name] = { price: price, qty:
+                <img src="
