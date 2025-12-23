@@ -30,4 +30,150 @@
         
         .total-price { text-align: right; font-size: 24px; font-weight: bold; color: #2c3e50; margin-top: 15px; }
         
-        .order-form { margin-top: 30px; display: flex; flex-direction: column; gap: 15
+        .order-form { margin-top: 30px; display: flex; flex-direction: column; gap: 15px; }
+        .order-form input { padding: 15px; border: 1px solid #ddd; border-radius: 10px; font-size: 16px; }
+        
+        .btn-submit { background: #3182ce; color: white; border: none; padding: 18px; border-radius: 12px; font-size: 20px; font-weight: bold; cursor: pointer; width: 100%; }
+        .btn-submit:disabled { background: #cbd5e0; }
+        
+        .footer { margin-top: 50px; text-align: center; color: #a0aec0; font-size: 14px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Wilson 嚴選商城</h1>
+
+        <div class="product-list">
+            <div class="product-item">
+                <img src="item1.jpg" class="product-img" alt="刺繡花卉抱枕">
+                <div class="product-info"><h3>刺繡花卉抱枕</h3><p>$500</p></div>
+                <button class="btn-add" onclick="addToCart('刺繡花卉抱枕', 500)">加入</button>
+            </div>
+
+            <div class="product-item">
+                <img src="item3.jpg" class="product-img" alt="可愛無尾熊娃娃">
+                <div class="product-info"><h3>可愛無尾熊娃娃</h3><p>$600</p></div>
+                <button class="btn-add" onclick="addToCart('可愛無尾熊娃娃', 600)">加入</button>
+            </div>
+
+            <div class="product-item">
+                <img src="item2.jpg" class="product-img" alt="KOF 雅典娜海報">
+                <div class="product-info"><h3>KOF 雅典娜海報</h3><p>$30</p></div>
+                <button class="btn-add" onclick="addToCart('KOF 雅典娜海報', 30)">加入</button>
+            </div>
+        </div>
+
+        <div class="cart-section">
+            <h2 style="font-size: 20px; margin-top:0;">🛒 您的購物清單</h2>
+            <div id="cartItems"><p style="color:#aaa; font-size: 14px;">購物車目前是空的</p></div>
+            <div class="total-price">總計: $<span id="totalPrice">0</span></div>
+        </div>
+
+        <div class="order-form">
+            <input type="text" id="userName" placeholder="收件人姓名 (必填)">
+            <input type="tel" id="userPhone" placeholder="聯絡電話 (必填)">
+            <input type="email" id="userEmail" placeholder="您的電子郵件">
+            <input type="text" id="bankLastFive" placeholder="銀行匯款帳號後 5 碼 (必填)" maxlength="5">
+            <button class="btn-submit" id="submitBtn" onclick="sendOrder()">確認送出訂單</button>
+        </div>
+
+        <div class="footer">作者 Wilson Chang</div>
+    </div>
+
+    <script>
+        (function() { emailjs.init("1xyaEXeOMn5ydv3Ay"); })();
+
+        var cart = {}; 
+        var total = 0;
+
+        function addToCart(name, price) {
+            if (cart[name]) {
+                cart[name].qty += 1;
+            } else {
+                cart[name] = { price: price, qty: 1 };
+            }
+            updateCartUI();
+        }
+
+        // 刪除功能
+        function removeFromCart(name) {
+            delete cart[name];
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            var cartDiv = document.getElementById('cartItems');
+            var totalSpan = document.getElementById('totalPrice');
+            cartDiv.innerHTML = '';
+            total = 0;
+
+            var items = Object.keys(cart);
+            if (items.length === 0) {
+                cartDiv.innerHTML = '<p style="color:#aaa; font-size: 14px;">購物車目前是空的</p>';
+            } else {
+                items.forEach(function(name) {
+                    var subtotal = cart[name].price * cart[name].qty;
+                    total += subtotal;
+                    cartDiv.innerHTML += '<div class="cart-item">' + 
+                        '<span>' + name + ' x ' + cart[name].qty + ' ($' + subtotal + ')</span>' +
+                        '<button class="btn-remove" onclick="removeFromCart(\'' + name + '\')">❌ 刪除</button>' +
+                        '</div>';
+                });
+            }
+            totalSpan.innerText = total;
+        }
+
+        function sendOrder() {
+            var name = document.getElementById('userName').value.trim();
+            var phone = document.getElementById('userPhone').value.trim();
+            var bank = document.getElementById('bankLastFive').value.trim();
+
+            if (!name || !phone || !bank) {
+                alert("請完整填寫收件人、電話及匯款後五碼！");
+                return;
+            }
+            if (total === 0) {
+                alert("購物車是空的喔！");
+                return;
+            }
+
+            var submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerText = "訂單傳送中...";
+
+            var orderList = "";
+            Object.keys(cart).forEach(function(n) {
+                orderList += n + " x " + cart[n].qty + " ($" + (cart[n].price * cart[n].qty) + ")\n";
+            });
+
+            var templateParams = {
+                to_name: "Wilson Chang",
+                from_name: name,
+                user_phone: phone,
+                bank_info: bank, // 傳送匯款後五碼
+                order_content: orderList,
+                total_amount: total,
+                message: "新訂單來自：" + name + "\n電話：" + phone + "\n匯款後五碼：" + bank + "\n內容：\n" + orderList + "\n總額：$" + total
+            };
+
+            emailjs.send("service_ja60kka", "template_a9ij80j", templateParams)
+                .then(function() {
+                    alert("🎉 訂單成功送出！請確認您的匯款資訊。");
+                    cart = {};
+                    updateCartUI();
+                    document.getElementById('userName').value = "";
+                    document.getElementById('userPhone').value = "";
+                    document.getElementById('userEmail').value = "";
+                    document.getElementById('bankLastFive').value = "";
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = "確認送出訂單";
+                }, function(err) {
+                    alert("傳送失敗，請再試一次。");
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = "確認送出訂單";
+                });
+        }
+    </script>
+</body>
+</html>
