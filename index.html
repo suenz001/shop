@@ -13,7 +13,10 @@
         h1 { text-align: center; color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
         .product-list { display: flex; flex-direction: column; gap: 20px; }
         .product-item { display: flex; align-items: center; padding: 15px; border-bottom: 1px solid #f0f0f0; gap: 15px; }
-        .product-img { width: 80px; height: 80px; object-fit: cover; border-radius: 10px; border: 1px solid #eee; }
+        
+        /* 圖片放大設定：將寬高從 80px 改為 120px */
+        .product-img { width: 120px; height: 120px; object-fit: cover; border-radius: 10px; border: 1px solid #eee; }
+        
         .product-info { flex-grow: 1; }
         .product-info h3 { margin: 0; font-size: 16px; }
         .product-info p { margin: 5px 0 0; color: #e63946; font-weight: bold; }
@@ -43,7 +46,7 @@
             </div>
 
             <div class="product-item">
-                <img src="https://images.unsplash.com/photo-1591901193301-490333d73f47?q=80&w=800&auto=format&fit=crop" class="product-img" alt="可愛無尾熊娃娃">
+                <img src="item3.jpg" class="product-img" alt="可愛無尾熊娃娃">
                 <div class="product-info">
                     <h3>可愛無尾熊娃娃</h3>
                     <p>$600</p>
@@ -89,79 +92,4 @@
             if (cart[name]) {
                 cart[name].qty += 1;
             } else {
-                cart[name] = { price: price, qty: 1 };
-            }
-            updateCartUI();
-        }
-
-        function updateCartUI() {
-            var cartDiv = document.getElementById('cartItems');
-            var totalSpan = document.getElementById('totalPrice');
-            cartDiv.innerHTML = '';
-            total = 0;
-
-            var items = Object.keys(cart);
-            if (items.length === 0) {
-                cartDiv.innerHTML = '<p style="color:#aaa; font-size: 14px;">購物車目前是空的</p>';
-            } else {
-                items.forEach(function(name) {
-                    var subtotal = cart[name].price * cart[name].qty;
-                    total += subtotal;
-                    cartDiv.innerHTML += '<div class="cart-item"><span>' + name + ' x ' + cart[name].qty + '</span><span>$' + subtotal + '</span></div>';
-                });
-            }
-            totalSpan.innerText = total;
-        }
-
-        function sendOrder() {
-            var name = document.getElementById('userName').value.trim();
-            var phone = document.getElementById('userPhone').value.trim();
-            var email = document.getElementById('userEmail').value.trim();
-
-            if (!name || !phone) {
-                alert("請填寫收件人姓名與電話！");
-                return;
-            }
-            if (total === 0) {
-                alert("購物車內沒有商品喔！");
-                return;
-            }
-
-            var submitBtn = document.getElementById('submitBtn');
-            submitBtn.disabled = true;
-            submitBtn.innerText = "傳送訂單中...";
-
-            var orderList = "";
-            Object.keys(cart).forEach(function(name) {
-                orderList += name + " x " + cart[name].qty + " ($" + (cart[name].price * cart[name].qty) + ")\n";
-            });
-
-            var templateParams = {
-                to_name: "Wilson Chang",
-                from_name: name,
-                user_phone: phone,
-                user_email: email,
-                order_content: orderList,
-                total_amount: total,
-                message: "收到來自 " + name + " 的訂單\n電話：" + phone + "\n明細：\n" + orderList + "\n總計：$" + total
-            };
-
-            emailjs.send("service_ja60kka", "template_a9ij80j", templateParams)
-                .then(function() {
-                    alert("🎉 訂單成功送出！Wilson 會盡快聯絡您。");
-                    cart = {};
-                    updateCartUI();
-                    document.getElementById('userName').value = "";
-                    document.getElementById('userPhone').value = "";
-                    document.getElementById('userEmail').value = "";
-                    submitBtn.disabled = false;
-                    submitBtn.innerText = "確認送出訂單";
-                }, function(error) {
-                    alert("傳送失敗：" + JSON.stringify(error));
-                    submitBtn.disabled = false;
-                    submitBtn.innerText = "確認送出訂單";
-                });
-        }
-    </script>
-</body>
-</html>
+                cart[name] = { price: price, qty:
