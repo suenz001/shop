@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wilson 嚴選商城</title>
+    <title>Wilson 嚴選商城 - 居家與動漫精品</title>
     
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 
@@ -11,139 +11,21 @@
         body { font-family: "Microsoft JhengHei", sans-serif; background-color: #f8f9fa; margin: 0; padding: 20px; color: #333; }
         .container { max-width: 500px; margin: 0 auto; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
         h1 { text-align: center; color: #2c3e50; border-bottom: 2px solid #eee; padding-bottom: 10px; }
-        .product-item { display: flex; justify-content: space-between; align-items: center; padding: 15px; border-bottom: 1px solid #f0f0f0; }
-        .product-info h3 { margin: 0; font-size: 16px; }
+        
+        /* 商品展示樣式 */
+        .product-list { display: flex; flex-direction: column; gap: 20px; }
+        .product-item { display: flex; align-items: center; padding: 15px; border-bottom: 1px solid #f0f0f0; gap: 15px; }
+        .product-img { width: 80px; height: 80px; object-fit: cover; border-radius: 10px; border: 1px solid #eee; }
+        .product-info { flex-grow: 1; }
+        .product-info h3 { margin: 0; font-size: 16px; color: #2d3748; }
         .product-info p { margin: 5px 0 0; color: #e63946; font-weight: bold; }
-        .btn-add { background: #4a7c59; color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        
+        .btn-add { background: #4a7c59; color: white; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 13px; }
+        
         .cart-section { background: #fdfdfd; padding: 15px; border-radius: 12px; margin-top: 20px; border: 1px dashed #ccc; }
         .cart-item { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 8px; color: #555; }
         .total-price { text-align: right; font-size: 22px; font-weight: bold; color: #2c3e50; margin-top: 15px; }
+        
         .order-form { margin-top: 25px; display: flex; flex-direction: column; gap: 12px; }
         .order-form input { padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; }
-        .btn-submit { background: #3182ce; color: white; border: none; padding: 16px; border-radius: 12px; font-size: 18px; font-weight: bold; cursor: pointer; width: 100%; }
-        .btn-submit:disabled { background: #cbd5e0; }
-        .footer { margin-top: 40px; text-align: center; color: #a0aec0; font-size: 14px; font-weight: bold; }
-    </style>
-</head>
-<body>
-
-    <div class="container">
-        <h1>Wilson 嚴選商城</h1>
-
-        <div class="product-list">
-            <div class="product-item">
-                <div class="product-info"><h3>精選咖啡豆 (250g)</h3><p>$450</p></div>
-                <button class="btn-add" onclick="addToCart('精選咖啡豆', 450)">加入購物車</button>
-            </div>
-            <div class="product-item">
-                <div class="product-info"><h3>手沖咖啡濾紙</h3><p>$120</p></div>
-                <button class="btn-add" onclick="addToCart('手沖咖啡濾紙', 120)">加入購物車</button>
-            </div>
-        </div>
-
-        <div class="cart-section">
-            <h2 style="font-size: 18px; margin-top:0;">🛒 您的購物清單</h2>
-            <div id="cartItems"><p style="color:#aaa; font-size: 14px;">購物車目前是空的</p></div>
-            <div class="total-price">總計: $<span id="totalPrice">0</span></div>
-        </div>
-
-        <div class="order-form">
-            <input type="text" id="userName" placeholder="收件人姓名 (必填)">
-            <input type="tel" id="userPhone" placeholder="聯絡電話 (必填)">
-            <input type="email" id="userEmail" placeholder="您的電子郵件">
-            <button class="btn-submit" id="submitBtn" onclick="sendOrder()">確認送出訂單</button>
-        </div>
-
-        <div class="footer">作者 Wilson Chang</div>
-    </div>
-
-    <script>
-        // 已填入你的 Public Key
-        (function() {
-            emailjs.init("1xyaEXeOMn5ydv3Ay"); 
-        })();
-
-        var cart = {}; 
-        var total = 0;
-
-        function addToCart(name, price) {
-            if (cart[name]) {
-                cart[name].qty += 1;
-            } else {
-                cart[name] = { price: price, qty: 1 };
-            }
-            updateCartUI();
-        }
-
-        function updateCartUI() {
-            var cartDiv = document.getElementById('cartItems');
-            var totalSpan = document.getElementById('totalPrice');
-            cartDiv.innerHTML = '';
-            total = 0;
-
-            var items = Object.keys(cart);
-            if (items.length === 0) {
-                cartDiv.innerHTML = '<p style="color:#aaa; font-size: 14px;">購物車目前是空的</p>';
-            } else {
-                items.forEach(function(name) {
-                    var subtotal = cart[name].price * cart[name].qty;
-                    total += subtotal;
-                    cartDiv.innerHTML += '<div class="cart-item"><span>' + name + ' x ' + cart[name].qty + '</span><span>$' + subtotal + '</span></div>';
-                });
-            }
-            totalSpan.innerText = total;
-        }
-
-        function sendOrder() {
-            var name = document.getElementById('userName').value.trim();
-            var phone = document.getElementById('userPhone').value.trim();
-            var email = document.getElementById('userEmail').value.trim();
-
-            if (!name || !phone) {
-                alert("請填寫收件人姓名與電話！");
-                return;
-            }
-            if (total === 0) {
-                alert("購物車內沒有商品喔！");
-                return;
-            }
-
-            var submitBtn = document.getElementById('submitBtn');
-            submitBtn.disabled = true;
-            submitBtn.innerText = "傳送訂單中...";
-
-            var orderList = "";
-            Object.keys(cart).forEach(function(name) {
-                orderList += name + " x " + cart[name].qty + " ($" + (cart[name].price * cart[name].qty) + ")\n";
-            });
-
-            // 這些變數名稱必須對應你 EmailJS Template 裡的 {{ }} 標籤
-            var templateParams = {
-                to_name: "Wilson Chang",
-                from_name: name,
-                user_phone: phone,
-                user_email: email,
-                order_content: orderList,
-                total_amount: total,
-                message: "收到來自 " + name + " 的訂單\n電話：" + phone + "\n明細：\n" + orderList + "\n總計：$" + total
-            };
-
-            emailjs.send("service_ja60kka", "template_a9ij80j", templateParams)
-                .then(function() {
-                    alert("🎉 訂單成功送出！Wilson 會盡快聯絡您。");
-                    cart = {};
-                    updateCartUI();
-                    document.getElementById('userName').value = "";
-                    document.getElementById('userPhone').value = "";
-                    document.getElementById('userEmail').value = "";
-                    submitBtn.disabled = false;
-                    submitBtn.innerText = "確認送出訂單";
-                }, function(error) {
-                    alert("傳送失敗，請確認 EmailJS 設定。錯誤訊息：" + JSON.stringify(error));
-                    submitBtn.disabled = false;
-                    submitBtn.innerText = "確認送出訂單";
-                });
-        }
-    </script>
-</body>
-</html>
+        .btn-submit { background: #3182ce; color: white
