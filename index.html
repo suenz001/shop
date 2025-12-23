@@ -24,8 +24,6 @@
         
         .cart-section { background: #fdfdfd; padding: 15px; border-radius: 12px; margin-top: 25px; border: 1px dashed #ccc; }
         .cart-item { display: flex; justify-content: space-between; align-items: center; font-size: 15px; margin-bottom: 10px; color: #555; }
-        
-        /* 刪除按鈕樣式 */
         .btn-remove { background: #e53e3e; color: white; border: none; padding: 2px 8px; border-radius: 5px; cursor: pointer; font-size: 12px; margin-left: 10px; }
         
         .total-price { text-align: right; font-size: 24px; font-weight: bold; color: #2c3e50; margin-top: 15px; }
@@ -62,6 +60,12 @@
                 <div class="product-info"><h3>KOF 雅典娜海報</h3><p>$30</p></div>
                 <button class="btn-add" onclick="addToCart('KOF 雅典娜海報', 30)">加入</button>
             </div>
+
+            <div class="product-item">
+                <img src="item4.jpg" class="product-img" alt="銅鑼鄉64號豆干">
+                <div class="product-info"><h3>銅鑼鄉64號豆干</h3><p>$120</p></div>
+                <button class="btn-add" onclick="addToCart('銅鑼鄉64號豆干', 120)">加入</button>
+            </div>
         </div>
 
         <div class="cart-section">
@@ -96,7 +100,6 @@
             updateCartUI();
         }
 
-        // 刪除功能
         function removeFromCart(name) {
             delete cart[name];
             updateCartUI();
@@ -151,7 +154,7 @@
                 to_name: "Wilson Chang",
                 from_name: name,
                 user_phone: phone,
-                bank_info: bank, // 傳送匯款後五碼
+                bank_info: bank,
                 order_content: orderList,
                 total_amount: total,
                 message: "新訂單來自：" + name + "\n電話：" + phone + "\n匯款後五碼：" + bank + "\n內容：\n" + orderList + "\n總額：$" + total
